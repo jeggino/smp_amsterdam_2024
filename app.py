@@ -346,19 +346,12 @@ elif selected == '📷/📹':
 
     with tab1:    
         try:
-            db_content_infopictures_filtered = db_content_infopictures[db_content_infopictures["project"]==project]
-            list_names = db_content_infopictures_filtered["pict_name"].to_list()
+            list_names = db_content_infopictures
             for file in drive.list()["names"]:
                 if file in list_names:
                     res = drive.get(file).read()
                     try:
-                        st.video(res)
-                        btn = st.download_button(
-                        label="Download image",
-                        data=res,
-                        file_name="res.png",
-                        mime="image/png"
-                        )
+                        st.image(res)
                     except:
                         st.video(res)
                     st.write(db_content_infopictures_filtered.loc[db_content_infopictures_filtered["pict_name"]==file,"info"].iloc[0])
