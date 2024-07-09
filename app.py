@@ -331,10 +331,6 @@ if selected == '📊':
         df_path_2 = df_network[df_network.combination.isin(list_now)]
         list_number_connections.append(len(df_path_2))
     
-    st.write(f"Number of connections for that location: {list_number_connections[LOCATION]}")
-    st.write(f"Average number of connections: {pd.Series(list_number_connections).mean().round()}")
-    st.write(f"Average distance total: {pd.Series(distance_total).mean().round()}")
-    
     st.pydeck_chart(pydeck_obj=r, use_container_width=True)
 
 
