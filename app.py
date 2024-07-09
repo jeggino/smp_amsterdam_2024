@@ -6,6 +6,24 @@ import pandas as pd
 
 import pydeck as pdk
 
+# --- CONFIGURATION ---
+st.set_page_config(
+    page_title="❌❌❌",
+    page_icon="🦇",
+    layout="centered",
+    menu_items={
+        'About': "https://www.ecoloogamsterdam.nl/"
+    }
+    
+)
+
+
+# --- CONNECT TO DETA ---
+# deta = Deta(st.secrets["deta_key"])
+# db = deta.Base("df_amsterdam_bat")
+
+# --- COSTANTS ---
+
 
 ### FUNCTIONS ###
 def load_point:
