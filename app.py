@@ -338,7 +338,7 @@ if selected == '📊':
 
 
 elif selected == '📋':
-    gdf_point.drop('geometry',axis=1)
+    st.dataframe(gdf_point.drop('geometry',axis=1))
     
 
 elif selected == '📷/📹':
