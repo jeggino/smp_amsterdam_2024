@@ -139,11 +139,11 @@ gdf_point
 
 "---"
 
-total = alt.Chart(gdf_point).mark_boxplot(extent='min-max').encode(
+total = alt.Chart(gdf_point.drop('geometry',axis=1)).mark_boxplot(extent='min-max').encode(
     y='antaal:Q'
 )
 
-buurt = alt.Chart(gdf_point).mark_boxplot(extent='min-max').encode(
+buurt = alt.Chart(gdf_point.drop('geometry',axis=1)).mark_boxplot(extent='min-max').encode(
     y='antaal:Q',
     x = 'area:N'
 )
