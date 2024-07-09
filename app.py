@@ -166,7 +166,24 @@ buurt = alt.Chart(gdf_point.drop('geometry',axis=1)).mark_boxplot(extent='min-ma
 )
 
 chart = total|buurt
-chart_number_1 = st.altair_chart(chart, use_container_width=True, theme=None, key="chart_number_1")
+st.altair_chart(chart, use_container_width=True, theme=None, key="chart_number_1")df_date = df_raw.value_counts().to_frame().reset_index()
+
+"---"
+df_date = gdf_point.drop('geometry',axis=1).value_counts().to_frame().reset_index()
+df_date['DATE'] = pd.to_datetime(df_date['date'])
+df_by_week = df_date.resample('W', on ='DATE').sum().reset_index()
+df_by_week['date_label'] = df_by_week['DATE'].apply(
+    lambda x: f'{(x - pd.Timedelta(days=6)).strftime("%b %d")} - {x.strftime("%B %d")}'
+)
+chart_date = alt.Chart(df_by_week).mark_bar().encode(
+    x=alt.X('count:Q',sort=None,title="",axis=alt.Axis(grid=False,domain=True,ticks=True)),
+    y=alt.Y('date_label:N',sort=None,title="",axis=alt.Axis(grid=False,domain=True,ticks=True),)
+)
+
+st.altair_chart(chart_date, use_container_width=True, theme=None, key="chart_date")
+
+
+
 
 
 
