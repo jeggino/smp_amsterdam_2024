@@ -27,7 +27,7 @@ st.set_page_config(
 
 ### FUNCTIONS ###
 def load_point:
-  df_raw = pd.read_csv(r"C:\Users\Luigi\Downloads\amserdam.csv")
+  df_raw = pd.read_csv("dataset/df_raw.csv")
   df_raw[['lat', 'lng']] = df_raw["geometry"].apply(lambda st: st[st.find("(")+1:st.find(")")]).str.split(' ', n=1, expand=True).astype("float")
   df_raw.drop('geometry',axis=1,inplace=True)   
   df_raw['date'].apply(pd.to_datetime).dt.date
