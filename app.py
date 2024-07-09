@@ -144,39 +144,8 @@ buurt = alt.Chart(gdf_point.drop('geometry',axis=1)).mark_boxplot(extent='min-ma
     x = 'area:N'
 )
 
-chart_number_1 = st.altair_chart(total, use_container_width=True, theme=None, key="chart_number_1")
-# chart_number_2 = st.altair_chart(buurt, use_container_width=True, theme="streamlit", key="chart_number_2", on_select="rerun", selection_mode=None)
-
-import streamlit as st
-import pandas as pd
-import numpy as np
-import altair as alt
-
-if "data" not in st.session_state:
-    st.session_state.data = pd.DataFrame(
-        np.random.randn(20, 3), columns=["a", "b", "c"]
-    )
-df = st.session_state.data
-
-point_selector = alt.selection_point("point_selection")
-interval_selector = alt.selection_interval("interval_selection")
-chart = (
-    alt.Chart(df)
-    .mark_circle()
-    .encode(
-        x="a",
-        y="b",
-        size="c",
-        color="c",
-        tooltip=["a", "b", "c"],
-        fillOpacity=alt.condition(point_selector, alt.value(1), alt.value(0.3)),
-    )
-    .add_params(point_selector, interval_selector)
-)
-
-event = st.altair_chart(chart, key="alt_chart", on_select="rerun")
-
-event
+chart = total|buurt
+chart_number_1 = st.altair_chart(chart, use_container_width=True, theme=None, key="chart_number_1")
 
 
 
