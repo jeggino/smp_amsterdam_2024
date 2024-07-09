@@ -144,11 +144,10 @@ buurt = alt.Chart(gdf_point).mark_boxplot(extent='min-max').encode(
     x = 'area:N'
 )
 
-chart = total|buurt
+chart_number_1 = st.altair_chart(total, use_container_width=True, theme="streamlit", key="chart_number_1", on_select="rerun", selection_mode=None)
+chart_number_2 = st.altair_chart(buurt, use_container_width=True, theme="streamlit", key="chart_number_2", on_select="rerun", selection_mode=None)
 
-chart_number = st.altair_chart(chart, use_container_width=True, theme="streamlit", key=None, on_select="rerun", selection_mode=None)
-
-chart_number
+chart_number_1
 
 
 
