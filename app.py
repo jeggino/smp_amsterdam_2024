@@ -169,21 +169,42 @@ chart = total|buurt
 st.altair_chart(chart, use_container_width=True, theme=None, key="chart_number_1")
 
 "---"
-df_date = gdf_point.drop('geometry',axis=1)
-df_date['DATE'] = pd.to_datetime(df_date['date'])
-df_date
-df_by_week = df_date.resample('W', on ='DATE').sum().reset_index()
-df_by_week['date_label'] = df_by_week['DATE'].apply(
-    lambda x: f'{(x - pd.Timedelta(days=6)).strftime("%b %d")} - {x.strftime("%B %d")}'
-)
-chart_date = alt.Chart(df_by_week).mark_bar().encode(
-    x=alt.X('count:Q',sort=None,title="",axis=alt.Axis(grid=False,domain=True,ticks=True)),
-    y=alt.Y('date_label:N',sort=None,title="",axis=alt.Axis(grid=False,domain=True,ticks=True),)
-)
+chart_date = alt.Chart(gdf_point.drop('geometry',axis=1)).mark_circle(
+    opacity=0.8,
+    stroke='black',
+    strokeWidth=1,
+    strokeOpacity=0.4
+).encode(
+    x=alt.X('date:T', title=None,scale=alt.Scale(domain=['05-01-2024','08-01-2024']) ),
+    y=alt.Y(
+        'area:N',
+        sort=alt.EncodingSortField(field="antaal", op="sum", order='descending'),
+        title=None
+    ),
+    size=alt.Size('antaal:Q',
+        legend=alt.Legend(title='antaal', clipHeight=30, format='s')
+    ),
+    color=alt.Color('area:N', legend=None),
+    tooltip=[
+        "area:N",
+        alt.Tooltip("date:T"),
+        alt.Tooltip("species:N"),
+        alt.Tooltip("antaal:Q", format='~s')
+    ],
+).properties(
+    width=750,
+    height=320
+).configure_axisY(
+    domain=False,
+    ticks=False,
+    offset=5
+).configure_axisX(
+    grid=False,
+).configure_view(
+    stroke=None
+).interactive()
 
 st.altair_chart(chart_date, use_container_width=True, theme=None, key="chart_date")
-
-
 
 
 
