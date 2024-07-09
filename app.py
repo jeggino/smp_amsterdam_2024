@@ -212,7 +212,7 @@ LOCATION = 15
 DISTANCE = 1000
 
 
-c = list(set(itertools.combinations(range(len(gdf_raw)), 2)))
+c = list(set(itertools.combinations(range(len(gdf_point)), 2)))
 
 dict_distances = {}
 distance_total = []
