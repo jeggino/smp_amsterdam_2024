@@ -237,7 +237,7 @@ if selected == '📊':
         grid=False,
     ).configure_view(
         stroke=None
-    )#.interactive()
+    ).interactive()
     
     st.altair_chart(chart_date, use_container_width=True, theme=None, key="chart_date")
     
