@@ -48,7 +48,7 @@ def load_buurt(gdf_raw):
 
   return gdf_buurt
 
-def map_buurt(gdf_buurt):
+def map_buurt(gdf_buurt,gdf_raw):
   
   
   INITIAL_VIEW_STATE = pdk.ViewState(latitude=gdf_raw["lng"].mean(), 
@@ -87,7 +87,7 @@ gdf_point = load_point()
 gdf_buurt = load_buurt(gdf_point)
 
 # map
-map_buurt(gdf_buurt)
+map_buurt(gdf_buurt,gdf_point)
 
 
 
