@@ -6,6 +6,8 @@ import pandas as pd
 
 import pydeck as pdk
 
+import altair as alt
+
 # --- CONFIGURATION ---
 st.set_page_config(
     page_title="❌❌❌",
@@ -131,7 +133,22 @@ st.pydeck_chart(pydeck_obj=map_buurt(gdf_buurt,gdf_point), use_container_width=T
 size_scale = st.number_input("Set size scale", min_value=1, max_value=10, value="min", step=1, key="size_scale")
 st.pydeck_chart(pydeck_obj=map_point(gdf_point,size_scale), use_container_width=True)
 
+"---"
 
+total = alt.Chart(gdf_point).mark_boxplot(extent='min-max').encode(
+    y='antaal:Q'
+)
+
+buurt = alt.Chart(gdf_point).mark_boxplot(extent='min-max').encode(
+    y='antaal:Q',
+    x = 'area:N'
+)
+
+chart = total|buurt
+
+chart_number = st.altair_chart(chart, use_container_width=True, theme="streamlit", key=None, on_select="rerun", selection_mode=None)
+
+chart_number
 
 
 
