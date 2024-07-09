@@ -354,7 +354,7 @@ elif selected == '📷/📹':
                         st.image(res)
                     except:
                         st.video(res)
-                    st.write(db_content_infopictures_filtered.loc[db_content_infopictures_filtered["pict_name"]==file,"info"].iloc[0])
+                    st.write(db_content_infopictures.loc[db_content_infopictures["pict_name"]==file,"info"].iloc[0])
                 "---"
         except:
             st.warning("Nog geen foto's")
