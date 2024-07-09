@@ -147,7 +147,36 @@ buurt = alt.Chart(gdf_point.drop('geometry',axis=1)).mark_boxplot(extent='min-ma
 chart_number_1 = st.altair_chart(total, use_container_width=True, theme=None, key="chart_number_1")
 # chart_number_2 = st.altair_chart(buurt, use_container_width=True, theme="streamlit", key="chart_number_2", on_select="rerun", selection_mode=None)
 
-chart_number_1
+import streamlit as st
+import pandas as pd
+import numpy as np
+
+if "data" not in st.session_state:
+    st.session_state.data = pd.DataFrame(
+        np.random.randn(20, 3), columns=["a", "b", "c"]
+    )
+
+spec = {
+    "mark": {"type": "circle", "tooltip": True},
+    "params": [
+        {"name": "interval_selection", "select": "interval"},
+        {"name": "point_selection", "select": "point"},
+    ],
+    "encoding": {
+        "x": {"field": "a", "type": "quantitative"},
+        "y": {"field": "b", "type": "quantitative"},
+        "size": {"field": "c", "type": "quantitative"},
+        "color": {"field": "c", "type": "quantitative"},
+        "fillOpacity": {
+            "condition": {"param": "point_selection", "value": 1},
+            "value": 0.3,
+        },
+    },
+}
+
+event = st.vega_lite_chart(st.session_state.data, spec, key="vega_chart", on_select="rerun")
+
+event
 
 
 
