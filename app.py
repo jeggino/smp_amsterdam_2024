@@ -352,7 +352,7 @@ elif selected == '📷/📹':
                 if file in list_names:
                     res = drive.get(file).read()
                     try:
-                        st.image(res)
+                        st.video(res)
                         btn = st.download_button(
                         label="Download image",
                         data=res,
