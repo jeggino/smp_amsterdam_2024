@@ -87,7 +87,7 @@ gdf_point = load_point()
 gdf_buurt = load_buurt(gdf_point)
 
 # map
-map_buurt(gdf_buurt,gdf_point)
+st.pydeck_chart(pydeck_obj=map_buurt(gdf_buurt,gdf_point), use_container_width=True)
 
 
 
