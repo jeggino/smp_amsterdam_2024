@@ -166,7 +166,7 @@ buurt = alt.Chart(gdf_point.drop('geometry',axis=1)).mark_boxplot(extent='min-ma
 )
 
 chart = total|buurt
-st.altair_chart(chart, use_container_width=True, theme=None, key="chart_number_1")df_date = df_raw.value_counts().to_frame().reset_index()
+st.altair_chart(chart, use_container_width=True, theme=None, key="chart_number_1")
 
 "---"
 df_date = gdf_point.drop('geometry',axis=1).value_counts().to_frame().reset_index()
