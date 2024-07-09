@@ -14,30 +14,30 @@ import altair as alt
 
 
 # --- CONFIGURATION ---
-st.markdown(
-    """
-<style>
-    [data-testid="collapsedControl"] {
-        display: none
-    }
-</style>
-""",
-    unsafe_allow_html=True,
-)
+# st.markdown(
+#     """
+# <style>
+#     [data-testid="collapsedControl"] {
+#         display: none
+#     }
+# </style>
+# """,
+#     unsafe_allow_html=True,
+# )
 
-st.markdown("""
-    <style>
-    .css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob, .styles_viewerBadge__1yB5_, .viewerBadge_link__1S137, .viewerBadge_text__1JaDK{ display: none; } #MainMenu{ visibility: hidden; } footer { visibility: hidden; } header { visibility: hidden; }
-    </style>
-    """,
-    unsafe_allow_html=True)
+# st.markdown("""
+#     <style>
+#     .css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob, .styles_viewerBadge__1yB5_, .viewerBadge_link__1S137, .viewerBadge_text__1JaDK{ display: none; } #MainMenu{ visibility: hidden; } footer { visibility: hidden; } header { visibility: hidden; }
+#     </style>
+#     """,
+#     unsafe_allow_html=True)
 
-st.markdown("""
-<style>
-    div.block-container {padding-top: 0em; padding-bottom: 0rem; padding-left: 0rem; padding-right: 0rem; margin-top: -5em; margin-bottom: 2em;}
-</style>
-""",
-    unsafe_allow_html=True)
+# st.markdown("""
+# <style>
+#     div.block-container {padding-top: 0em; padding-bottom: 0rem; padding-left: 0rem; padding-right: 0rem; margin-top: -5em; margin-bottom: 2em;}
+# </style>
+# """,
+#     unsafe_allow_html=True)
 
 st.set_page_config(
     page_title="❌❌❌",
