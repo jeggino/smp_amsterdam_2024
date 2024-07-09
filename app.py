@@ -204,7 +204,7 @@ if selected == '📊':
     
     "---"
     df_chart_date = gdf_point.drop('geometry',axis=1)
-    df_chart_date['date'] = df_chart_date['date'].apply(pd.to_datetime).dt.date
+    # df_chart_date['date'] = df_chart_date['date'].apply(pd.to_datetime).dt.date
     chart_date = alt.Chart(df_chart_date).mark_circle(
         opacity=0.8,
         stroke='black',
@@ -235,7 +235,7 @@ if selected == '📊':
         grid=False,
     ).configure_view(
         stroke=None
-    ).interactive()
+    )#.interactive()
     
     st.altair_chart(chart_date, use_container_width=True, theme=None, key="chart_date")
     
