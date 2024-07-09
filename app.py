@@ -346,7 +346,7 @@ elif selected == '📷/📹':
 
     with tab1:    
         try:
-            list_names = db_content_infopictures
+            list_names = db_content_infopictures["pict_name"].to_list()
             for file in drive.list()["names"]:
                 if file in list_names:
                     res = drive.get(file).read()
