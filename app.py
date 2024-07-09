@@ -55,7 +55,6 @@ def insert_info(pict_name,info):
   return db_infopictures.put({"pict_name":pict_name,"info":info})
 def load_point():
   df_raw = pd.read_csv("dataset/df_raw.csv")
-  # df_raw['date'] = df_raw['date'].apply(pd.to_datetime).dt.date
   gdf_raw = gpd.GeoDataFrame(df_raw, geometry=gpd.points_from_xy(df_raw['lat'], df_raw['lng']), crs="EPSG:4326")
 
   return gdf_raw
@@ -204,7 +203,9 @@ if selected == '📊':
     st.altair_chart(chart, use_container_width=True, theme=None, key="chart_number_1")
     
     "---"
-    chart_date = alt.Chart(gdf_point.drop('geometry',axis=1)).mark_circle(
+    df_chart_date = gdf_point.drop('geometry',axis=1)
+    df_chart_date['date'] = df_chart_date['date'].apply(pd.to_datetime).dt.date
+    chart_date = alt.Chart(df_chart_date).mark_circle(
         opacity=0.8,
         stroke='black',
         strokeWidth=1,
