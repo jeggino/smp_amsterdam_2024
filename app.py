@@ -354,7 +354,7 @@ elif selected == '📷/📹':
                         st.image(res)
                     except:
                         st.video(res)
-                    st.write(db_content_infopictures.loc[db_content_infopictures["pict_name"]==file,"info"].iloc[0])
+                    # st.write(db_content_infopictures.loc[db_content_infopictures["pict_name"]==file,"info"].iloc[0])
                 "---"
         except:
             st.warning("Nog geen foto's")
@@ -379,5 +379,5 @@ elif selected == '📷/📹':
                     pict_name = password_generator()
                     bytes_data = uploaded_file.getvalue()
                     drive.put(f"{pict_name}", data=bytes_data)
-                    insert_info(pict_name,info)
+                    # insert_info(pict_name,info)
                     st.rerun()
