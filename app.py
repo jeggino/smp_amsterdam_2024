@@ -8,6 +8,7 @@ import pydeck as pdk
 
 import altair as alt
 
+
 # --- CONFIGURATION ---
 st.set_page_config(
     page_title="❌❌❌",
@@ -20,9 +21,13 @@ st.set_page_config(
 )
 
 
+
 # --- CONNECT TO DETA ---
-# deta = Deta(st.secrets["deta_key"])
-# db = deta.Base("df_amsterdam_bat")
+deta = Deta(st.secrets["deta_key"])
+db_infopictures = deta.Base("df_infopictures")
+drive = deta.Drive("df_pictures")
+
+db_content_infopictures = pd.DataFrame(db_infopictures.fetch().items)
 
 # --- COSTANTS ---
 
@@ -141,166 +146,223 @@ def map_heatmap(gdf_raw,opacity,threshold):
 gdf_point = load_point()
 gdf_buurt = load_buurt(gdf_point)
 
-# map
-st.pydeck_chart(pydeck_obj=map_buurt(gdf_buurt,gdf_point), use_container_width=True)
+selected = option_menu(None, ['📊','📋','📷/📹'], 
+                       icons=None,
+                       default_index=0,
+                       orientation="horizontal",
+                       )
 
-"---"
-
-size_scale = st.number_input("Set size scale", min_value=1, max_value=10, value="min", step=1, key="size_scale")
-st.pydeck_chart(pydeck_obj=map_point(gdf_point,size_scale), use_container_width=True)
-
-"---"
-opacity = st.number_input("Set opacity", min_value=0.1, max_value=1.0, value=0.5, key="opacity")
-threshold = st.number_input("Set threshold", min_value=0.1, max_value=1.0, value=0.8, key="threshold")
-st.pydeck_chart(pydeck_obj=map_heatmap(gdf_point,opacity,threshold), use_container_width=True)
-
-"---"
-
-total = alt.Chart(gdf_point.drop('geometry',axis=1)).mark_boxplot(extent='min-max').encode(
-    y='antaal:Q'
-)
-
-buurt = alt.Chart(gdf_point.drop('geometry',axis=1)).mark_boxplot(extent='min-max').encode(
-    y='antaal:Q',
-    x = 'area:N'
-)
-
-chart = total|buurt
-st.altair_chart(chart, use_container_width=True, theme=None, key="chart_number_1")
-
-"---"
-chart_date = alt.Chart(gdf_point.drop('geometry',axis=1)).mark_circle(
-    opacity=0.8,
-    stroke='black',
-    strokeWidth=1,
-    strokeOpacity=0.4
-).encode(
-    x=alt.X('date:T', title=None,scale=alt.Scale(domain=['05-01-2024','08-01-2024']) ),
-    y=alt.Y(
-        'area:N',
-        sort=alt.EncodingSortField(field="antaal", op="sum", order='descending'),
-        title=None
-    ),
-    size=alt.Size('antaal:Q',
-        legend=alt.Legend(title='antaal', clipHeight=30, format='s')
-    ),
-    color=alt.Color('area:N', legend=None),
-    tooltip=[
-        "area:N",
-        alt.Tooltip("date:T"),
-        alt.Tooltip("species:N"),
-        alt.Tooltip("antaal:Q", format='~s')
-    ],
-).configure_axisY(
-    domain=False,
-    ticks=False,
-    offset=5
-).configure_axisX(
-    grid=False,
-).configure_view(
-    stroke=None
-).interactive()
-
-st.altair_chart(chart_date, use_container_width=True, theme=None, key="chart_date")
-
-"---"
-
-import itertools
-
-
-LOCATION = 15
-DISTANCE = 1000
-
-
-c = list(set(itertools.combinations(range(len(gdf_point)), 2)))
-
-dict_distances = {}
-distance_total = []
-
-gdf_dist = gdf_point.copy()
-gdf_dist.to_crs(epsg=3310, inplace=True)
-
-for comb in c:
-    distance = round(gdf_dist.loc[comb[0],"geometry"].distance(gdf_dist.loc[comb[1],"geometry"]))
-    distance_total.append(distance)
+if selected == '📊':
+    # map
+    st.pydeck_chart(pydeck_obj=map_buurt(gdf_buurt,gdf_point), use_container_width=True)
     
-    if distance<DISTANCE:
-        dict_distances[comb] = distance
+    "---"
+    
+    size_scale = st.number_input("Set size scale", min_value=1, max_value=10, value="min", step=1, key="size_scale")
+    st.pydeck_chart(pydeck_obj=map_point(gdf_point,size_scale), use_container_width=True)
+    
+    "---"
+    opacity = st.number_input("Set opacity", min_value=0.1, max_value=1.0, value=0.5, key="opacity")
+    threshold = st.number_input("Set threshold", min_value=0.1, max_value=1.0, value=0.8, key="threshold")
+    st.pydeck_chart(pydeck_obj=map_heatmap(gdf_point,opacity,threshold), use_container_width=True)
+    
+    "---"
+    
+    total = alt.Chart(gdf_point.drop('geometry',axis=1)).mark_boxplot(extent='min-max').encode(
+        y='antaal:Q'
+    )
+    
+    buurt = alt.Chart(gdf_point.drop('geometry',axis=1)).mark_boxplot(extent='min-max').encode(
+        y='antaal:Q',
+        x = 'area:N'
+    )
+    
+    chart = total|buurt
+    st.altair_chart(chart, use_container_width=True, theme=None, key="chart_number_1")
+    
+    "---"
+    chart_date = alt.Chart(gdf_point.drop('geometry',axis=1)).mark_circle(
+        opacity=0.8,
+        stroke='black',
+        strokeWidth=1,
+        strokeOpacity=0.4
+    ).encode(
+        x=alt.X('date:T', title=None,scale=alt.Scale(domain=['05-01-2024','08-01-2024']) ),
+        y=alt.Y(
+            'area:N',
+            sort=alt.EncodingSortField(field="antaal", op="sum", order='descending'),
+            title=None
+        ),
+        size=alt.Size('antaal:Q',
+            legend=alt.Legend(title='antaal', clipHeight=30, format='s')
+        ),
+        color=alt.Color('area:N', legend=None),
+        tooltip=[
+            "area:N",
+            alt.Tooltip("date:T"),
+            alt.Tooltip("species:N"),
+            alt.Tooltip("antaal:Q", format='~s')
+        ],
+    ).configure_axisY(
+        domain=False,
+        ticks=False,
+        offset=5
+    ).configure_axisX(
+        grid=False,
+    ).configure_view(
+        stroke=None
+    ).interactive()
+    
+    st.altair_chart(chart_date, use_container_width=True, theme=None, key="chart_date")
+    
+    "---"
+    
+    import itertools
+    
+    
+    LOCATION = 15
+    DISTANCE = 1000
+    
+    
+    c = list(set(itertools.combinations(range(len(gdf_point)), 2)))
+    
+    dict_distances = {}
+    distance_total = []
+    
+    gdf_dist = gdf_point.copy()
+    gdf_dist.to_crs(epsg=3310, inplace=True)
+    
+    for comb in c:
+        distance = round(gdf_dist.loc[comb[0],"geometry"].distance(gdf_dist.loc[comb[1],"geometry"]))
+        distance_total.append(distance)
         
-df_network = pd.DataFrame(dict_distances.items(),columns=["combination","distance"])
-df_network["path"] = df_network["combination"].apply(lambda x: [[gdf_point.loc[x[0],"lat"],gdf_point.loc[x[0],"lng"]],
-                                                                [gdf_point.loc[x[1],"lat"],gdf_point.loc[x[1],"lng"]]])
-
-
-if LOCATION is None:
-    df_path_2 = df_network
+        if distance<DISTANCE:
+            dict_distances[comb] = distance
+            
+    df_network = pd.DataFrame(dict_distances.items(),columns=["combination","distance"])
+    df_network["path"] = df_network["combination"].apply(lambda x: [[gdf_point.loc[x[0],"lat"],gdf_point.loc[x[0],"lng"]],
+                                                                    [gdf_point.loc[x[1],"lat"],gdf_point.loc[x[1],"lng"]]])
     
-else:
-    list_now = []
+    
+    if LOCATION is None:
+        df_path_2 = df_network
+        
+    else:
+        list_now = []
+    
+        for i in df_network.combination:
+            if LOCATION in i:
+                list_now.append(i)
+    
+        df_path_2 = df_network[df_network.combination.isin(list_now)]
+    
+    
+    data = gdf_point
+    data["antallNORM"] = data['antaal']\
+    .apply(lambda x: (255+((x - data['antaal'].min())*(255)))/(data['antaal'].max() - data['antaal'].min()))
+    
+    
+    
+    
+    column_layer = pdk.Layer(
+        "ColumnLayer",
+        data=data,
+        get_position=["lat", "lng"],
+        get_elevation="antaal",
+        elevation_scale=10,
+        radius=3,
+        get_fill_color="[antallNORM+95, antallNORM+95, antallNORM+95]",
+        pickable=True,
+        auto_highlight=True,
+    )
+    
+    
+    df = df_path_2
+    
+    layer = pdk.Layer(
+        type="PathLayer",
+        data=df,
+        pickable=False,
+        get_color="[255,255,255]",
+        width_scale=1,
+        width_min_pixls=1,
+        get_path="path",
+        get_width=5,
+    )
+    
+    tooltip = {"html": "<b>Aantal:</b> {antaal}"}
+    
+    view_state = pdk.ViewState(latitude=gdf_point["lng"].mean(), 
+                                       longitude=gdf_point["lat"].mean(), 
+                                       zoom=10, max_zoom=18,pitch=90, bearing=20)
+    
+    r = pdk.Deck(layers=[column_layer,layer], initial_view_state=view_state, tooltip=tooltip, map_style='dark')
+    
+    list_number_connections = []
+    
+    for location in range(29):
+    
+        list_now = []
+    
+        for i in df_network.combination:
+            if location in i:
+                list_now.append(i)
+    
+        df_path_2 = df_network[df_network.combination.isin(list_now)]
+        list_number_connections.append(len(df_path_2))
+    
+    st.write(f"Number of connections for that location: {list_number_connections[LOCATION]}")
+    st.write(f"Average number of connections: {pd.Series(list_number_connections).mean().round()}")
+    st.write(f"Average distance total: {pd.Series(distance_total).mean().round()}")
+    
+    st.pydeck_chart(pydeck_obj=r, use_container_width=True)
 
-    for i in df_network.combination:
-        if LOCATION in i:
-            list_now.append(i)
+elif selected == '📋':
 
-    df_path_2 = df_network[df_network.combination.isin(list_now)]
+elif selected == '📷/📹':
+    tab1, tab2 = st.tabs(["🎞️","📂"])
 
+    with tab1:    
+        try:
+            db_content_infopictures_filtered = db_content_infopictures[db_content_infopictures["project"]==project]
+            list_names = db_content_infopictures_filtered["pict_name"].to_list()
+            for file in drive.list()["names"]:
+                if file in list_names:
+                    res = drive.get(file).read()
+                    try:
+                        st.image(res)
+                        btn = st.download_button(
+                        label="Download image",
+                        data=res,
+                        file_name="res.png",
+                        mime="image/png"
+                        )
+                    except:
+                        st.video(res)
+                    st.write(db_content_infopictures_filtered.loc[db_content_infopictures_filtered["pict_name"]==file,"info"].iloc[0])
+                "---"
+        except:
+            st.warning("Nog geen foto's")
 
-data = gdf_point
-data["antallNORM"] = data['antaal']\
-.apply(lambda x: (255+((x - data['antaal'].min())*(255)))/(data['antaal'].max() - data['antaal'].min()))
-
-
-
-
-column_layer = pdk.Layer(
-    "ColumnLayer",
-    data=data,
-    get_position=["lat", "lng"],
-    get_elevation="antaal",
-    elevation_scale=10,
-    radius=3,
-    get_fill_color="[antallNORM+95, antallNORM+95, antallNORM+95]",
-    pickable=True,
-    auto_highlight=True,
-)
-
-
-df = df_path_2
-
-layer = pdk.Layer(
-    type="PathLayer",
-    data=df,
-    pickable=False,
-    get_color="[255,255,255]",
-    width_scale=1,
-    width_min_pixls=1,
-    get_path="path",
-    get_width=5,
-)
-
-tooltip = {"html": "<b>Aantal:</b> {antaal}"}
-
-view_state = pdk.ViewState(latitude=gdf_point["lng"].mean(), 
-                                   longitude=gdf_point["lat"].mean(), 
-                                   zoom=10, max_zoom=18,pitch=90, bearing=20)
-
-r = pdk.Deck(layers=[column_layer,layer], initial_view_state=view_state, tooltip=tooltip, map_style='dark')
-
-list_number_connections = []
-
-for location in range(29):
-
-    list_now = []
-
-    for i in df_network.combination:
-        if location in i:
-            list_now.append(i)
-
-    df_path_2 = df_network[df_network.combination.isin(list_now)]
-    list_number_connections.append(len(df_path_2))
-
-st.write(f"Number of connections for that location: {list_number_connections[LOCATION]}")
-st.write(f"Average number of connections: {pd.Series(list_number_connections).mean().round()}")
-st.write(f"Average distance total: {pd.Series(distance_total).mean().round()}")
-
-st.pydeck_chart(pydeck_obj=r, use_container_width=True)
+    with tab2:
+        
+        uploaded_file = st.file_uploader("Een afbeelding uploaded",label_visibility="hidden")
+        if uploaded_file:
+            with st.container(border=True):
+                info = st.text_input("Schrijf wat informatie over de foto...",value=None,placeholder="Schrijf wat informatie over de foto...", label_visibility="hidden")
+                try:
+                    st.image(uploaded_file)
+                except:
+                    st.video(uploaded_file)
+                    
+                # Every form must have a submit button.
+                submitted = st.button("Gegevens opslaan")
+                if submitted:
+                    if info==None:
+                        st.warning("Provide  infos")
+                        st.stop()
+                    pict_name = password_generator()
+                    bytes_data = uploaded_file.getvalue()
+                    drive.put(f"{pict_name}", data=bytes_data)
+                    insert_info(pict_name,info,project)
+                    st.rerun()
