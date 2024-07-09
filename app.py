@@ -28,13 +28,7 @@ st.set_page_config(
 ### FUNCTIONS ###
 def load_point():
   df_raw = pd.read_csv("dataset/df_raw.csv")
-  df_raw[['lat', 'lng']] = df_raw["geometry"].apply(lambda st: st[st.find("(")+1:st.find(")")]).str.split(' ', n=1, expand=True).astype("float")
-  df_raw.drop('geometry',axis=1,inplace=True)   
   df_raw['date'].apply(pd.to_datetime).dt.date
-  df_raw = df_raw.replace({"Alko 18":"Alko"})
-  df_raw['species'] = "Pipistrellus pipistrellus"
-  df_raw['nl_naam'] = "gewone dwergvleermuis"
-  
   gdf_raw = gpd.GeoDataFrame(df_raw, geometry=gpd.points_from_xy(df_raw['lat'], df_raw['lng']), crs="EPSG:4326")
 
   return gdf_raw
