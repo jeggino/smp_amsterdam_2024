@@ -119,6 +119,22 @@ def map_point(gdf_raw,size_scale):
     
     return r
 
+def map_heatmap(gdf_raw,opacity,threshold):
+    view_state = pdk.ViewState(latitude=gdf_raw["lng"].mean(), 
+                                       longitude=gdf_raw["lat"].mean(), 
+                                       zoom=11, max_zoom=18,pitch=0, bearing=20)
+    layer = pdk.Layer(
+        "HeatmapLayer",
+        data=gdf_raw,
+        opacity=opacity,
+        get_position=["lat", "lng"],
+        threshold=threshold,
+    )
+    
+    r = pdk.Deck(layers=[layer], initial_view_state=view_state)
+    
+    return r
+
 ### APP ###
 
 # load dataset
@@ -132,6 +148,11 @@ st.pydeck_chart(pydeck_obj=map_buurt(gdf_buurt,gdf_point), use_container_width=T
 
 size_scale = st.number_input("Set size scale", min_value=1, max_value=10, value="min", step=1, key="size_scale")
 st.pydeck_chart(pydeck_obj=map_point(gdf_point,size_scale), use_container_width=True)
+
+"---"
+opacity = st.number_input("Set size scale", min_value=0.1, max_value=1, value=0.5, key="opacity")
+threshold = st.number_input("Set size scale", min_value=1, max_value=10, value=0.8, key="threshold")
+st.pydeck_chart(pydeck_obj=map_heatmap(gdf_point,opacity,threshold), use_container_width=True)
 
 "---"
 
