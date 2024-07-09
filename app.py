@@ -211,7 +211,9 @@ if selected == '📊':
         strokeWidth=1,
         strokeOpacity=0.4
     ).encode(
-        x=alt.X('date:T', title=None,scale=alt.Scale(domain=['05-01-2024','08-01-2024']) ),
+        x=alt.X('date:T', title=None,
+                # scale=alt.Scale(domain=['05-01-2024','08-01-2024']) 
+               ),
         y=alt.Y(
             'area:N',
             sort=alt.EncodingSortField(field="antaal", op="sum", order='descending'),
