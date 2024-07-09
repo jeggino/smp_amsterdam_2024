@@ -34,7 +34,7 @@ drive = deta.Drive("df_pictures")
 db_content_infopictures = pd.DataFrame(db_infopictures.fetch().items)
 
 # --- COSTANTS ---
-
+LOGO = "pictures/Screenshot 2024-07-09 115637.png"
 
 ### FUNCTIONS ###
 def password_generator():
@@ -160,16 +160,19 @@ def map_heatmap(gdf_raw,opacity,threshold):
     return r
 
 ### APP ###
-
-# load dataset
-gdf_point = load_point()
-gdf_buurt = load_buurt(gdf_point)
-
 selected = option_menu(None, ['📊','📋','📷/📹'], 
                        icons=None,
                        default_index=0,
                        orientation="horizontal",
                        )
+
+st.logo(image=LOGO,link="https://streamlit.io/gallery", icon_image=LOGO)
+
+# load dataset
+gdf_point = load_point()
+gdf_buurt = load_buurt(gdf_point)
+
+
 
 if selected == '📊':
     # map
