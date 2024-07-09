@@ -317,7 +317,10 @@ if selected == '📊':
     
     st.pydeck_chart(pydeck_obj=r, use_container_width=True)
 
+
 elif selected == '📋':
+    gdf_point.drop('geometry',axis=1)
+    
 
 elif selected == '📷/📹':
     tab1, tab2 = st.tabs(["🎞️","📂"])
