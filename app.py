@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 
 import random
+import itertools
 
 import geopandas as gpd
 import pandas as pd
@@ -239,11 +240,8 @@ if selected == '📊':
     
     "---"
     
-    import itertools
-    
-    
-    LOCATION = 15
-    DISTANCE = 1000
+    DISTANCE = st.slider("Set max distance?", 100, 2000, 500)
+    LOCATION = None
     
     
     c = list(set(itertools.combinations(range(len(gdf_point)), 2)))
