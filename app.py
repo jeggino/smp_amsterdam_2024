@@ -146,7 +146,7 @@ def map_point(gdf_raw,size_scale):
 def map_heatmap(gdf_raw,opacity,threshold):
     view_state = pdk.ViewState(latitude=gdf_raw["lng"].mean(), 
                                        longitude=gdf_raw["lat"].mean(), 
-                                       zoom=11, max_zoom=18,pitch=0, bearing=20)
+                                       zoom=11, max_zoom=10,pitch=0, bearing=20)
     layer = pdk.Layer(
         "HeatmapLayer",
         data=gdf_raw,
