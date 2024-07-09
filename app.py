@@ -191,9 +191,6 @@ chart_date = alt.Chart(gdf_point.drop('geometry',axis=1)).mark_circle(
         alt.Tooltip("species:N"),
         alt.Tooltip("antaal:Q", format='~s')
     ],
-).properties(
-    width=750,
-    height=320
 ).configure_axisY(
     domain=False,
     ticks=False,
