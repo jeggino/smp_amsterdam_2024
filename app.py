@@ -150,8 +150,8 @@ size_scale = st.number_input("Set size scale", min_value=1, max_value=10, value=
 st.pydeck_chart(pydeck_obj=map_point(gdf_point,size_scale), use_container_width=True)
 
 "---"
-opacity = st.number_input("Set size scale", min_value=0.1, max_value=1, value=0.5, key="opacity")
-threshold = st.number_input("Set size scale", min_value=1, max_value=10, value=0.8, key="threshold")
+opacity = st.number_input("Set size scale", min_value=0.1, max_value=1.0, value=0.5, key="opacity")
+threshold = st.number_input("Set size scale", min_value=0.1, max_value=1.0, value=0.8, key="threshold")
 st.pydeck_chart(pydeck_obj=map_heatmap(gdf_point,opacity,threshold), use_container_width=True)
 
 "---"
