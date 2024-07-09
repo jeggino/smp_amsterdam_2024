@@ -1,6 +1,8 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 
+import random
+
 import geopandas as gpd
 import pandas as pd
 
@@ -35,6 +37,21 @@ db_content_infopictures = pd.DataFrame(db_infopictures.fetch().items)
 
 
 ### FUNCTIONS ###
+def password_generator():
+    password_length = 12
+
+    characters = "abcde12345"
+
+    password = ""   
+
+    for index in range(password_length):
+        password = password + random.choice(characters)
+        
+    return password
+
+def insert_info(pict_name,info,project):
+
+  return db_infopictures.put({"pict_name":pict_name,"info":info,"project":project})
 def load_point():
   df_raw = pd.read_csv("dataset/df_raw.csv")
   df_raw['date'].apply(pd.to_datetime).dt.date
