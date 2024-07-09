@@ -80,7 +80,7 @@ def map_buurt(gdf_buurt,gdf_raw):
   
   return r
 
-def map_point(gdf_raw):
+def map_point(gdf_raw,size_scale):
     # Data from OpenStreetMap, accessed via osmpy
     ICON_URL = "https://images.vexels.com/media/users/3/135975/isolated/preview/cfd8bb70033550adc52ef910d92397db-flying-bats-circle-icon.png"
     
@@ -105,7 +105,7 @@ def map_point(gdf_raw):
         data=data,
         get_icon="icon_data",
         get_size="antaal",
-        size_scale=20,
+        size_scale=size_scale,
         get_position=["lat", "lng"],
         pickable=True,
     )
@@ -128,7 +128,8 @@ st.pydeck_chart(pydeck_obj=map_buurt(gdf_buurt,gdf_point), use_container_width=T
 
 "---"
 
-st.pydeck_chart(pydeck_obj=map_point(gdf_point), use_container_width=True)
+size_scale = st.number_input("Set size scale", min_value=1, max_value=10, value="min", step=1, key="size_scale")
+st.pydeck_chart(pydeck_obj=map_point(gdf_point,size_scale), use_container_width=True)
 
 
 
