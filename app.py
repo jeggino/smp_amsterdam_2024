@@ -203,6 +203,108 @@ chart_date = alt.Chart(gdf_point.drop('geometry',axis=1)).mark_circle(
 
 st.altair_chart(chart_date, use_container_width=True, theme=None, key="chart_date")
 
+"---"
+
+import itertools
+
+
+LOCATION = 15
+DISTANCE = 1000
+
+
+c = list(set(itertools.combinations(range(len(gdf_raw)), 2)))
+
+dict_distances = {}
+distance_total = []
+
+gdf_dist = gdf_point.copy()
+gdf_dist.to_crs(epsg=3310, inplace=True)
+
+for comb in c:
+    distance = round(gdf_dist.loc[comb[0],"geometry"].distance(gdf_dist.loc[comb[1],"geometry"]))
+    distance_total.append(distance)
+    
+    if distance<DISTANCE:
+        dict_distances[comb] = distance
+        
+df_network = pd.DataFrame(dict_distances.items(),columns=["combination","distance"])
+df_network["path"] = df_network["combination"].apply(lambda x: [[gdf_raw.loc[x[0],"lat"],gdf_raw.loc[x[0],"lng"]],
+                                                                [gdf_raw.loc[x[1],"lat"],gdf_raw.loc[x[1],"lng"]]])
+
+
+if LOCATION is None:
+    df_path_2 = df_network
+    
+else:
+    list_now = []
+
+    for i in df_network.combination:
+        if LOCATION in i:
+            list_now.append(i)
+
+    df_path_2 = df_network[df_network.combination.isin(list_now)]
+
+
+data = gdf_point
+data["antallNORM"] = data['antaal']\
+.apply(lambda x: (255+((x - data['antaal'].min())*(255)))/(data['antaal'].max() - data['antaal'].min()))
+
+
+
+
+column_layer = pdk.Layer(
+    "ColumnLayer",
+    data=data,
+    get_position=["lat", "lng"],
+    get_elevation="antaal",
+    elevation_scale=10,
+    radius=3,
+    get_fill_color="[antallNORM+95, antallNORM+95, antallNORM+95]",
+    pickable=True,
+    auto_highlight=True,
+)
+
+
+df = df_path_2
+
+layer = pdk.Layer(
+    type="PathLayer",
+    data=df,
+    pickable=False,
+    get_color="[255,255,255]",
+    width_scale=1,
+    width_min_pixls=1,
+    get_path="path",
+    get_width=5,
+)
+
+tooltip = {"html": "<b>Aantal:</b> {antaal}"}
+
+view_state = pdk.ViewState(latitude=gdf_raw["lng"].mean(), 
+                                   longitude=gdf_raw["lat"].mean(), 
+                                   zoom=10, max_zoom=18,pitch=90, bearing=20)
+
+r = pdk.Deck(layers=[column_layer,layer], initial_view_state=view_state, tooltip=tooltip, map_style='dark')
+
+list_number_connections = []
+
+for location in range(29):
+
+    list_now = []
+
+    for i in df_network.combination:
+        if location in i:
+            list_now.append(i)
+
+    df_path_2 = df_network[df_network.combination.isin(list_now)]
+    list_number_connections.append(len(df_path_2))
+
+st.write(f"Number of connections for that location: {list_number_connections[LOCATION]}")
+st.write(f"Average number of connections: {pd.Series(list_number_connections).mean().round()}")
+st.write(f"Average distance total: {pd.Series(distance_total).mean().round()}")
+
+st.pydeck_chart(pydeck_obj=r, use_container_width=True)
+
 
 
 
