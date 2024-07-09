@@ -26,6 +26,7 @@ st.set_page_config(
 
 
 ### FUNCTIONS ###
+@st.cache_data
 def load_point():
   df_raw = pd.read_csv("dataset/df_raw.csv")
   df_raw['date'].apply(pd.to_datetime).dt.date
@@ -33,6 +34,7 @@ def load_point():
 
   return gdf_raw
 
+@st.cache_data
 def load_buurt(gdf_raw): 
   columns = ['Buurtnaam', 'Oppervlakte_m2','Oppervlakte_Km2','geometry']
   
@@ -80,6 +82,43 @@ def map_buurt(gdf_buurt,gdf_raw):
   
   return r
 
+def map_point(gdf_raw):
+    # Data from OpenStreetMap, accessed via osmpy
+    ICON_URL = "https://images.vexels.com/media/users/3/135975/isolated/preview/cfd8bb70033550adc52ef910d92397db-flying-bats-circle-icon.png"
+    
+    icon_data = {
+        "url": ICON_URL,
+        "width": 242,
+        "height": 242,
+        "anchorY": 242,
+    }
+    
+    data = gdf_raw
+    data["icon_data"] = None
+    for i in data.index:
+        data["icon_data"][i] = icon_data
+    
+    view_state = pdk.ViewState(latitude=gdf_raw["lng"].mean(), 
+                                       longitude=gdf_raw["lat"].mean(), 
+                                       zoom=10, max_zoom=18,pitch=0, bearing=20)
+    
+    icon_layer = pdk.Layer(
+        type="IconLayer",
+        data=data,
+        get_icon="icon_data",
+        get_size="antaal",
+        size_scale=20,
+        get_position=["lat", "lng"],
+        pickable=True,
+    )
+    
+    
+    tooltip = {"html": "<b>Aantal:</b> {antaal}"}
+    
+    r = pdk.Deck(layers=[icon_layer], initial_view_state=view_state, tooltip=tooltip, map_style='road')
+    
+    return r
+
 ### APP ###
 
 # load dataset
@@ -88,6 +127,12 @@ gdf_buurt = load_buurt(gdf_point)
 
 # map
 st.pydeck_chart(pydeck_obj=map_buurt(gdf_buurt,gdf_point), use_container_width=True)
+
+"---"
+
+st.pydeck_chart(pydeck_obj=map_point(gdf_point), use_container_width=True)
+
+
 
 
 
