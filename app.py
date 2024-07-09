@@ -4,6 +4,8 @@ from streamlit_option_menu import option_menu
 import geopandas as gpd
 import pandas as pd
 
+from deta import Deta
+
 import pydeck as pdk
 
 import altair as alt
