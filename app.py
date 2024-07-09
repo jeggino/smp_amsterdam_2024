@@ -26,7 +26,6 @@ st.set_page_config(
 
 
 ### FUNCTIONS ###
-@st.cache_data
 def load_point():
   df_raw = pd.read_csv("dataset/df_raw.csv")
   df_raw['date'].apply(pd.to_datetime).dt.date
@@ -34,7 +33,6 @@ def load_point():
 
   return gdf_raw
 
-@st.cache_data
 def load_buurt(gdf_raw): 
   columns = ['Buurtnaam', 'Oppervlakte_m2','Oppervlakte_Km2','geometry']
   
