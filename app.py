@@ -49,7 +49,7 @@ def password_generator():
         
     return password
 
-def insert_info(pict_name,info,project):
+def insert_info(pict_name,info):
 
   return db_infopictures.put({"pict_name":pict_name,"info":info})
 def load_point():
