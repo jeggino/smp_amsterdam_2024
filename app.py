@@ -228,8 +228,8 @@ for comb in c:
         dict_distances[comb] = distance
         
 df_network = pd.DataFrame(dict_distances.items(),columns=["combination","distance"])
-df_network["path"] = df_network["combination"].apply(lambda x: [[gdf_raw.loc[x[0],"lat"],gdf_raw.loc[x[0],"lng"]],
-                                                                [gdf_raw.loc[x[1],"lat"],gdf_raw.loc[x[1],"lng"]]])
+df_network["path"] = df_network["combination"].apply(lambda x: [[gdf_point.loc[x[0],"lat"],gdf_point.loc[x[0],"lng"]],
+                                                                [gdf_point.loc[x[1],"lat"],gdf_point.loc[x[1],"lng"]]])
 
 
 if LOCATION is None:
@@ -280,8 +280,8 @@ layer = pdk.Layer(
 
 tooltip = {"html": "<b>Aantal:</b> {antaal}"}
 
-view_state = pdk.ViewState(latitude=gdf_raw["lng"].mean(), 
-                                   longitude=gdf_raw["lat"].mean(), 
+view_state = pdk.ViewState(latitude=gdf_point["lng"].mean(), 
+                                   longitude=gdf_point["lat"].mean(), 
                                    zoom=10, max_zoom=18,pitch=90, bearing=20)
 
 r = pdk.Deck(layers=[column_layer,layer], initial_view_state=view_state, tooltip=tooltip, map_style='dark')
@@ -304,8 +304,3 @@ st.write(f"Average number of connections: {pd.Series(list_number_connections).me
 st.write(f"Average distance total: {pd.Series(distance_total).mean().round()}")
 
 st.pydeck_chart(pydeck_obj=r, use_container_width=True)
-
-
-
-
-
