@@ -135,6 +135,10 @@ st.pydeck_chart(pydeck_obj=map_point(gdf_point,size_scale), use_container_width=
 
 "---"
 
+gdf_point
+
+"---"
+
 total = alt.Chart(gdf_point).mark_boxplot(extent='min-max').encode(
     y='antaal:Q'
 )
