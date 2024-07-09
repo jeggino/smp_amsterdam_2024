@@ -169,7 +169,7 @@ chart = total|buurt
 st.altair_chart(chart, use_container_width=True, theme=None, key="chart_number_1")
 
 "---"
-df_date = gdf_point.drop('geometry',axis=1).value_counts().to_frame().reset_index()
+df_date = gdf_point.drop('geometry',axis=1)
 df_date['DATE'] = pd.to_datetime(df_date['date'])
 df_by_week = df_date.resample('W', on ='DATE').sum().reset_index()
 df_by_week['date_label'] = df_by_week['DATE'].apply(
