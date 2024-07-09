@@ -55,7 +55,7 @@ def insert_info(pict_name,info):
   return db_infopictures.put({"pict_name":pict_name,"info":info})
 def load_point():
   df_raw = pd.read_csv("dataset/df_raw.csv")
-  df_raw['date'] = df_raw['date'].apply(pd.to_datetime).dt.date
+  # df_raw['date'] = df_raw['date'].apply(pd.to_datetime).dt.date
   gdf_raw = gpd.GeoDataFrame(df_raw, geometry=gpd.points_from_xy(df_raw['lat'], df_raw['lng']), crs="EPSG:4326")
 
   return gdf_raw
