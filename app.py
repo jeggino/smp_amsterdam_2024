@@ -34,7 +34,7 @@ drive = deta.Drive("df_pictures")
 db_content_infopictures = pd.DataFrame(db_infopictures.fetch().items)
 
 # --- COSTANTS ---
-LOGO = "pictures/Screenshot 2024-07-09 115637.png"
+LOGO = "pictures/Untitled.png"
 
 ### FUNCTIONS ###
 def password_generator():
@@ -166,7 +166,7 @@ selected = option_menu(None, ['📊','📋','📷/📹'],
                        orientation="horizontal",
                        )
 
-st.logo(image=LOGO,link="https://streamlit.io/gallery", icon_image=LOGO)
+st.logo(image=LOGO,link="https://www.ecoloogamsterdam.nl/")
 
 # load dataset
 gdf_point = load_point()
