@@ -51,7 +51,7 @@ def password_generator():
 
 def insert_info(pict_name,info,project):
 
-  return db_infopictures.put({"pict_name":pict_name,"info":info,"project":project})
+  return db_infopictures.put({"pict_name":pict_name,"info":info})
 def load_point():
   df_raw = pd.read_csv("dataset/df_raw.csv")
   df_raw['date'].apply(pd.to_datetime).dt.date
@@ -386,5 +386,5 @@ elif selected == '📷/📹':
                     pict_name = password_generator()
                     bytes_data = uploaded_file.getvalue()
                     drive.put(f"{pict_name}", data=bytes_data)
-                    insert_info(pict_name,info,project)
+                    insert_info(pict_name,info)
                     st.rerun()
