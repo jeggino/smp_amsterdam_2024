@@ -162,14 +162,14 @@ if selected == '📊':
         "anchorY": 242,
     }
     
-    data = gdf_raw
+    data = gdf_point
     data["icon_data"] = None
     for i in data.index:
         data["icon_data"][i] = icon_data
     
     view_state = pdk.ViewState(latitude=data["lng"].mean(), 
-                                       longitude=data["lat"].mean(), 
-                                       zoom=10, max_zoom=18,pitch=0, bearing=20)
+                               longitude=data["lat"].mean(), 
+                               zoom=10, max_zoom=18,pitch=0, bearing=20)
     
     icon_layer = pdk.Layer(
         type="IconLayer",
