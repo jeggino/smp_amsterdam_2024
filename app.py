@@ -135,7 +135,7 @@ selected = option_menu(None, ['📊','📋','📷/📹'],
 
 # st.logo(image=LOGO,link="https://www.ecoloogamsterdam.nl/")
 with st.sidebar:
-    st.image(LOGO_2, caption='Sunrise by the mountains')
+    st.image(LOGO_2)
 
 # load dataset
 gdf_point = load_point()
