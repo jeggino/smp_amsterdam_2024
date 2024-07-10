@@ -150,9 +150,10 @@ if selected == '📊':
 
     if on:
         size_scale = st.number_input("Set size scale", min_value=1, max_value=10, value="min", step=1, key="size_scale")
+        get_size = "antaal"
 
     else:
-        size_scale = 1
+        get_size = None
     
     icon_data = {
         "url": ICON_URL,
@@ -174,7 +175,7 @@ if selected == '📊':
         type="IconLayer",
         data=data,
         get_icon="icon_data",
-        get_size="antaal",
+        get_size=get_size,
         size_scale=size_scale,
         get_position=["lat", "lng"],
         pickable=True,
