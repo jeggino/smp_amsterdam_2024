@@ -154,6 +154,7 @@ if selected == '📊':
 
     else:
         get_size = None
+        size_scale = None
     
     icon_data = {
         "url": ICON_URL,
