@@ -153,7 +153,7 @@ if selected == '📊':
         get_size = "antaal"
 
     else:
-        get_size = None
+        get_size = 5
         size_scale = 3
     
     icon_data = {
