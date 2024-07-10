@@ -37,6 +37,7 @@ db_content_infopictures = pd.DataFrame(db_infopictures.fetch().items)
 # --- COSTANTS ---
 LOGO = "pictures/Untitled.png"
 ICON_URL = "https://images.vexels.com/media/users/3/135975/isolated/preview/cfd8bb70033550adc52ef910d92397db-flying-bats-circle-icon.png"
+LOGO_2 = "pictures/logo.png"
 
 
 ### FUNCTIONS ###
@@ -133,6 +134,8 @@ selected = option_menu(None, ['📊','📋','📷/📹'],
                        )
 
 st.logo(image=LOGO,link="https://www.ecoloogamsterdam.nl/")
+with st.sidebar:
+    st.image(LOGO_2, caption='Sunrise by the mountains')
 
 # load dataset
 gdf_point = load_point()
