@@ -133,7 +133,7 @@ selected = option_menu(None, ['📊','📋','📷/📹'],
                        orientation="horizontal",
                        )
 
-st.logo(image=LOGO,link="https://www.ecoloogamsterdam.nl/")
+# st.logo(image=LOGO,link="https://www.ecoloogamsterdam.nl/")
 with st.sidebar:
     st.image(LOGO_2, caption='Sunrise by the mountains')
 
