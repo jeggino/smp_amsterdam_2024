@@ -36,6 +36,8 @@ db_content_infopictures = pd.DataFrame(db_infopictures.fetch().items)
 
 # --- COSTANTS ---
 LOGO = "pictures/Untitled.png"
+ICON_URL = "https://images.vexels.com/media/users/3/135975/isolated/preview/cfd8bb70033550adc52ef910d92397db-flying-bats-circle-icon.png"
+
 
 ### FUNCTIONS ###
 def password_generator():
@@ -106,42 +108,6 @@ def map_buurt(gdf_buurt,gdf_raw):
   
   return r
 
-def map_point(gdf_raw,size_scale):
-    # Data from OpenStreetMap, accessed via osmpy
-    ICON_URL = "https://images.vexels.com/media/users/3/135975/isolated/preview/cfd8bb70033550adc52ef910d92397db-flying-bats-circle-icon.png"
-    
-    icon_data = {
-        "url": ICON_URL,
-        "width": 242,
-        "height": 242,
-        "anchorY": 242,
-    }
-    
-    data = gdf_raw
-    data["icon_data"] = None
-    for i in data.index:
-        data["icon_data"][i] = icon_data
-    
-    view_state = pdk.ViewState(latitude=gdf_raw["lng"].mean(), 
-                                       longitude=gdf_raw["lat"].mean(), 
-                                       zoom=10, max_zoom=18,pitch=0, bearing=20)
-    
-    icon_layer = pdk.Layer(
-        type="IconLayer",
-        data=data,
-        get_icon="icon_data",
-        get_size="antaal",
-        size_scale=size_scale,
-        get_position=["lat", "lng"],
-        pickable=True,
-    )
-    
-    
-    tooltip = {"html": "<b>Aantal:</b> {antaal}"}
-    
-    r = pdk.Deck(layers=[icon_layer], initial_view_state=view_state, tooltip=tooltip, map_style='road')
-    
-    return r
 
 def map_heatmap(gdf_raw,opacity,threshold):
     view_state = pdk.ViewState(latitude=gdf_raw["lng"].mean(), 
@@ -179,13 +145,53 @@ if selected == '📊':
     st.pydeck_chart(pydeck_obj=map_buurt(gdf_buurt,gdf_point), use_container_width=True)
     
     "---"
+
+    on = st.toggle("Activate feature")
+
+    if on:
+        st.write("Feature activated!")
+        size_scale = st.number_input("Set size scale", min_value=1, max_value=10, value="min", step=1, key="size_scale")
+
+    else:
+        size_scale = 3
     
-    size_scale = st.number_input("Set size scale", min_value=1, max_value=10, value="min", step=1, key="size_scale")
-    st.pydeck_chart(pydeck_obj=map_point(gdf_point,size_scale), use_container_width=True)
+    icon_data = {
+        "url": ICON_URL,
+        "width": 242,
+        "height": 242,
+        "anchorY": 242,
+    }
+    
+    data = gdf_raw
+    data["icon_data"] = None
+    for i in data.index:
+        data["icon_data"][i] = icon_data
+    
+    view_state = pdk.ViewState(latitude=data["lng"].mean(), 
+                                       longitude=data["lat"].mean(), 
+                                       zoom=10, max_zoom=18,pitch=0, bearing=20)
+    
+    icon_layer = pdk.Layer(
+        type="IconLayer",
+        data=data,
+        get_icon="icon_data",
+        get_size="antaal",
+        size_scale=size_scale,
+        get_position=["lat", "lng"],
+        pickable=True,
+    )
+    
+    tooltip = {"html": "<b>Aantal:</b> {antaal}"}
+    
+    r = pdk.Deck(layers=[icon_layer], initial_view_state=view_state, tooltip=tooltip, map_style='road')
+    
+    st.pydeck_chart(pydeck_obj=r, use_container_width=True)
     
     "---"
     opacity = st.number_input("Set opacity", min_value=0.1, max_value=1.0, value=0.5, key="opacity")
     threshold = st.number_input("Set threshold", min_value=0.1, max_value=1.0, value=0.8, key="threshold")
+
+    
     st.pydeck_chart(pydeck_obj=map_heatmap(gdf_point,opacity,threshold), use_container_width=True)
     
     "---"
@@ -243,98 +249,98 @@ if selected == '📊':
     
     "---"
     
-    DISTANCE = st.slider("Set max distance?", 100, 2000, 500)
-    LOCATION = None
+    # DISTANCE = st.slider("Set max distance?", 100, 2000, 500)
+    # LOCATION = None
     
     
-    c = list(set(itertools.combinations(range(len(gdf_point)), 2)))
+    # c = list(set(itertools.combinations(range(len(gdf_point)), 2)))
     
-    dict_distances = {}
-    distance_total = []
+    # dict_distances = {}
+    # distance_total = []
     
-    gdf_dist = gdf_point.copy()
-    gdf_dist.to_crs(epsg=3310, inplace=True)
+    # gdf_dist = gdf_point.copy()
+    # gdf_dist.to_crs(epsg=3310, inplace=True)
     
-    for comb in c:
-        distance = round(gdf_dist.loc[comb[0],"geometry"].distance(gdf_dist.loc[comb[1],"geometry"]))
-        distance_total.append(distance)
+    # for comb in c:
+    #     distance = round(gdf_dist.loc[comb[0],"geometry"].distance(gdf_dist.loc[comb[1],"geometry"]))
+    #     distance_total.append(distance)
         
-        if distance<DISTANCE:
-            dict_distances[comb] = distance
+    #     if distance<DISTANCE:
+    #         dict_distances[comb] = distance
             
-    df_network = pd.DataFrame(dict_distances.items(),columns=["combination","distance"])
-    df_network["path"] = df_network["combination"].apply(lambda x: [[gdf_point.loc[x[0],"lat"],gdf_point.loc[x[0],"lng"]],
-                                                                    [gdf_point.loc[x[1],"lat"],gdf_point.loc[x[1],"lng"]]])
+    # df_network = pd.DataFrame(dict_distances.items(),columns=["combination","distance"])
+    # df_network["path"] = df_network["combination"].apply(lambda x: [[gdf_point.loc[x[0],"lat"],gdf_point.loc[x[0],"lng"]],
+    #                                                                 [gdf_point.loc[x[1],"lat"],gdf_point.loc[x[1],"lng"]]])
     
     
-    if LOCATION is None:
-        df_path_2 = df_network
+    # if LOCATION is None:
+    #     df_path_2 = df_network
         
-    else:
-        list_now = []
+    # else:
+    #     list_now = []
     
-        for i in df_network.combination:
-            if LOCATION in i:
-                list_now.append(i)
+    #     for i in df_network.combination:
+    #         if LOCATION in i:
+    #             list_now.append(i)
     
-        df_path_2 = df_network[df_network.combination.isin(list_now)]
-    
-    
-    data = gdf_point
-    data["antallNORM"] = data['antaal']\
-    .apply(lambda x: (255+((x - data['antaal'].min())*(255)))/(data['antaal'].max() - data['antaal'].min()))
+    #     df_path_2 = df_network[df_network.combination.isin(list_now)]
     
     
+    # data = gdf_point
+    # data["antallNORM"] = data['antaal']\
+    # .apply(lambda x: (255+((x - data['antaal'].min())*(255)))/(data['antaal'].max() - data['antaal'].min()))
     
     
-    column_layer = pdk.Layer(
-        "ColumnLayer",
-        data=data,
-        get_position=["lat", "lng"],
-        get_elevation="antaal",
-        elevation_scale=10,
-        radius=3,
-        get_fill_color="[antallNORM+95, antallNORM+95, antallNORM+95]",
-        pickable=True,
-        auto_highlight=True,
-    )
     
     
-    df = df_path_2
+    # column_layer = pdk.Layer(
+    #     "ColumnLayer",
+    #     data=data,
+    #     get_position=["lat", "lng"],
+    #     get_elevation="antaal",
+    #     elevation_scale=10,
+    #     radius=3,
+    #     get_fill_color="[antallNORM+95, antallNORM+95, antallNORM+95]",
+    #     pickable=True,
+    #     auto_highlight=True,
+    # )
     
-    layer = pdk.Layer(
-        type="PathLayer",
-        data=df,
-        pickable=False,
-        get_color="[255,255,255]",
-        width_scale=1,
-        width_min_pixls=1,
-        get_path="path",
-        get_width=5,
-    )
     
-    tooltip = {"html": "<b>Aantal:</b> {antaal}"}
+    # df = df_path_2
     
-    view_state = pdk.ViewState(latitude=gdf_point["lng"].mean(), 
-                                       longitude=gdf_point["lat"].mean(), 
-                                       zoom=10, max_zoom=18,pitch=90, bearing=20)
+    # layer = pdk.Layer(
+    #     type="PathLayer",
+    #     data=df,
+    #     pickable=False,
+    #     get_color="[255,255,255]",
+    #     width_scale=1,
+    #     width_min_pixls=1,
+    #     get_path="path",
+    #     get_width=5,
+    # )
     
-    r = pdk.Deck(layers=[column_layer,layer], initial_view_state=view_state, tooltip=tooltip, map_style='dark')
+    # tooltip = {"html": "<b>Aantal:</b> {antaal}"}
     
-    list_number_connections = []
+    # view_state = pdk.ViewState(latitude=gdf_point["lng"].mean(), 
+    #                                    longitude=gdf_point["lat"].mean(), 
+    #                                    zoom=10, max_zoom=18,pitch=90, bearing=20)
     
-    for location in range(29):
+    # r = pdk.Deck(layers=[column_layer,layer], initial_view_state=view_state, tooltip=tooltip, map_style='dark')
     
-        list_now = []
+    # list_number_connections = []
     
-        for i in df_network.combination:
-            if location in i:
-                list_now.append(i)
+    # for location in range(29):
     
-        df_path_2 = df_network[df_network.combination.isin(list_now)]
-        list_number_connections.append(len(df_path_2))
+    #     list_now = []
     
-    st.pydeck_chart(pydeck_obj=r, use_container_width=True)
+    #     for i in df_network.combination:
+    #         if location in i:
+    #             list_now.append(i)
+    
+    #     df_path_2 = df_network[df_network.combination.isin(list_now)]
+    #     list_number_connections.append(len(df_path_2))
+    
+    # st.pydeck_chart(pydeck_obj=r, use_container_width=True)
 
 
 elif selected == '📋':
