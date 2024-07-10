@@ -146,14 +146,13 @@ if selected == '📊':
     
     "---"
 
-    on = st.toggle("Activate feature")
+    on = st.toggle("Activate size scale")
 
     if on:
-        st.write("Feature activated!")
         size_scale = st.number_input("Set size scale", min_value=1, max_value=10, value="min", step=1, key="size_scale")
 
     else:
-        size_scale = 3
+        size_scale = 1
     
     icon_data = {
         "url": ICON_URL,
