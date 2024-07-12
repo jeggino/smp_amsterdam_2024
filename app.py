@@ -156,7 +156,7 @@ if selected == '📊':
         get_size = "antaal"
 
     else:
-        get_size = 5
+        get_size = 7
         size_scale = 3
     
     icon_data = {
@@ -173,7 +173,7 @@ if selected == '📊':
     
     view_state = pdk.ViewState(latitude=data["lng"].mean(), 
                                longitude=data["lat"].mean(), 
-                               zoom=10, max_zoom=18,pitch=0, bearing=20)
+                               zoom=11, max_zoom=18,pitch=50, bearing=20)
     
     icon_layer = pdk.Layer(
         type="IconLayer",
