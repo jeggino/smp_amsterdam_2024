@@ -144,6 +144,10 @@ gdf_buurt = load_buurt(gdf_point)
 
 
 if selected == '📊':
+    col_1,col_2 = st.column([1,3])
+    col_1.Image("pictures/Observation.jpg")
+
+    "---"
     # map
     st.pydeck_chart(pydeck_obj=map_buurt(gdf_buurt,gdf_point), use_container_width=True)
     
