@@ -26,8 +26,6 @@ st.set_page_config(
     
 )
 
-
-
 # --- CONNECT TO DETA ---
 deta = Deta(st.secrets["deta_key"])
 db_infopictures = deta.Base("df_infopictures")
@@ -38,8 +36,6 @@ db_content_infopictures = pd.DataFrame(db_infopictures.fetch().items)
 # --- COSTANTS ---
 ICON_URL = "https://images.vexels.com/media/users/3/135975/isolated/preview/cfd8bb70033550adc52ef910d92397db-flying-bats-circle-icon.png"
 LOGO = "pictures/logo.png"
-
-
 
 ### FUNCTIONS ###
 def password_generator():
@@ -144,7 +140,7 @@ gdf_buurt = load_buurt(gdf_point)
 
 
 if selected == '📊':
-    col_1,col_2 = st.column([1,3])
+    col_1,col_2 = st.columns([1,3])
     col_1.Image("pictures/Observation.jpg")
 
     "---"
