@@ -130,14 +130,13 @@ def map_heatmap(gdf_raw,opacity,threshold):
 
 ### APP ###
 with st.sidebar:
-    selected = option_menu(None, ['📊','📋','📷/📹'], 
-                           icons=None,
+    st.image(LOGO_2)
+    selected = option_menu("Main Menu", ['📊','📋','📷/📹'], 
+                           menu_icon="cast",
                            default_index=0,
-                           orientation="horizontal",
+                           orientation="venrtical",
                            )
 
-
-    st.image(LOGO_2)
 
 # load dataset
 gdf_point = load_point()
