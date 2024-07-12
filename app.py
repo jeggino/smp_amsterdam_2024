@@ -40,7 +40,21 @@ ICON_URL = "https://images.vexels.com/media/users/3/135975/isolated/preview/cfd8
 LOGO_2 = "pictures/logo.png"
 
 
+
 ### FUNCTIONS ###
+def set_background(png_file):
+    bin_str = get_base64(png_file)
+    page_bg_img = '''
+    <style>
+    .stApp {
+    background-image: url("data:image/png;base64,%s");
+    background-size: cover;
+    }
+    </style>
+    ''' % bin_str
+    st.markdown(page_bg_img, unsafe_allow_html=True)
+
+
 def password_generator():
     password_length = 12
 
@@ -134,6 +148,7 @@ selected = option_menu(None, ['📊','📋','📷/📹'],
                        )
 
 # st.logo(image=LOGO,link="https://www.ecoloogamsterdam.nl/")
+set_background(LOGO_2)
 with st.sidebar:
     st.image(LOGO_2)
 
