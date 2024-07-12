@@ -141,7 +141,7 @@ gdf_buurt = load_buurt(gdf_point)
 
 if selected == '📊':
     col_1,col_2 = st.columns([1,3])
-    col_1.Image("pictures/Observation.jpg")
+    col_1.image("pictures/Observation.jpg")
 
     "---"
     # map
