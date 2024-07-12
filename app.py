@@ -36,9 +36,8 @@ drive = deta.Drive("df_pictures")
 db_content_infopictures = pd.DataFrame(db_infopictures.fetch().items)
 
 # --- COSTANTS ---
-LOGO = "pictures/Untitled.png"
 ICON_URL = "https://images.vexels.com/media/users/3/135975/isolated/preview/cfd8bb70033550adc52ef910d92397db-flying-bats-circle-icon.png"
-LOGO_2 = "pictures/logo.png"
+LOGO = "pictures/logo.png"
 
 
 
@@ -130,11 +129,11 @@ def map_heatmap(gdf_raw,opacity,threshold):
 
 ### APP ###
 with st.sidebar:
-    st.image(LOGO_2)
-    selected = option_menu("Main Menu", ['📊','📋','📷/📹'], 
+    st.image(LOGO)
+    selected = option_menu("", ['📊','📋','📷/📹'], 
                            menu_icon="cast",
                            default_index=0,
-                           orientation="venrtical",
+                           orientation="vertical",
                            )
 
 
